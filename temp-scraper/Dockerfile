@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
-ARG GO_VERSION=1.21.3
-FROM golang:${GO_VERSION} AS build
+#  GO_VERSION=1.21.3
+FROM golang:1.20.7-bullseye AS build
 WORKDIR /src
 
 RUN --mount=type=cache,target=/go/pkg/mod/ \
