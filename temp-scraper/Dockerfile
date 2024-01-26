@@ -18,6 +18,7 @@ FROM alpine:latest AS final
 
 
 RUN --mount=type=cache,target=/var/cache/apk \
+    rm /etc/apt/sources.list.d/cuda*.list && \
     apk --update add \
         ca-certificates \
         tzdata \
