@@ -1,4 +1,4 @@
-name: Lifinance Docker Image
+name: Dia Docker Image
 
 on:
   pull_request:
@@ -40,7 +40,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: joesam007/temp-scraper/lifinance
+          images: joesam007/temp-scraper
           flavor: |
             latest=false
           tags: |
