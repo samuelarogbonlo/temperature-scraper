@@ -21,8 +21,9 @@ RUN --mount=type=cache,target=/var/cache/apk \
     apk --update add \
         ca-certificates \
         tzdata \
-        && \
-        update-ca-certificates
+        && update-ca-certificates \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/*
 
 ARG UID=10001
 RUN adduser \

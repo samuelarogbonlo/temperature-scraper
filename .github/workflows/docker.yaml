@@ -48,7 +48,7 @@ jobs:
             type=ref,event=tag
             type=edge
 
-      - name: Build image and push to ECR
+      - name: Build image and push to Docker Hub
         uses: docker/build-push-action@v5
         with:
           context: ./temp-scraper
