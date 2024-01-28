@@ -14,7 +14,7 @@ on:
 
 jobs:
   build-and-push-docker-image:
-    name: Build images and push to ECR
+    name: Build images and push to DockerHub
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
