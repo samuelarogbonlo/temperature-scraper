@@ -79,7 +79,7 @@ func main() {
 	cronJob := cron.New()
 	kafka.InfoLog.Println("Starting Temperature Scheduler")
 	kafka.InfoLog.Printf("Starting HTTP server on port %s", kafka.ProducerPort)
-	cronJob.AddFunc("@hourly", func() {
+	cronJob.AddFunc("* * * * *", func() {
 		cities := []string{"Zurich", "London", "Miami", "Tokyo", "Singapore"}
 		for _, city := range cities {
 			temp, err := getTemperature(city)
