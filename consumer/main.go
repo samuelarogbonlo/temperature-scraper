@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	// Prometheus metrics
+	// Prometheus metrics custom config
 	httpRequestsTotal = promauto.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "http_requests_total",
