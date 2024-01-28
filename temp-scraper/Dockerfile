@@ -1,4 +1,4 @@
-#  GO_VERSION=1.21.3
+
 FROM golang:1.21.3-bullseye AS build
 WORKDIR /src
 
@@ -15,14 +15,8 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
 FROM alpine:latest AS final
 
 
-RUN --mount=type=cache,target=/var/cache/apk \
-    rm /etc/apt/sources.list.d/cuda*.list && \
-    apk --update add \
-        ca-certificates \
-        tzdata \
-        && update-ca-certificates \
-        && apt-get clean \
-        && rm -rf /var/lib/apt/lists/*
+RUN apk --no-cache add ca-certificates tzdata && \
+    update-ca-certificates
 
 ARG UID=10001
 RUN adduser \
