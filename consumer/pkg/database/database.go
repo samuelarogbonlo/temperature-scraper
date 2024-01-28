@@ -2,8 +2,6 @@ package database
 
 import (
     "database/sql"
-    "fmt"
-    _ "log"
 	
     _ "github.com/lib/pq"
 )
@@ -15,7 +13,7 @@ type DB struct {
 type CityTemperature struct {
     City        string
     Temperature string
-    Time        string // use string for simplicity
+    Time        string
 }
 
 
@@ -30,7 +28,7 @@ func (db *DB) InitializeSchema() error {
     `
 
     if _, err := db.Exec(query); err != nil {
-        return fmt.Errorf("error creating city_temperatures table: %w", err)
+        return err
     }
     return nil
 }
@@ -58,3 +56,30 @@ func (db *DB) SaveCityTemperature(data CityTemperature) error {
     }
     return nil
 }
+
+
+func (db *DB) GetCityTemperature(city string) ([]CityTemperature, error) {
+    var temperatures []CityTemperature
+
+    query := `SELECT city, temperature, time FROM city_temperatures WHERE city = $1`
+    rows, err := db.Query(query, city)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    for rows.Next() {
+        var temp CityTemperature
+        if err := rows.Scan(&temp.City, &temp.Temperature, &temp.Time); err != nil {
+            return nil, err
+        }
+        temperatures = append(temperatures, temp)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return temperatures, nil
+}
+

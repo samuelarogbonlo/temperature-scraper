@@ -3,11 +3,10 @@ package kafkaConsumer
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"sync"
 	"time"
-
+    "os"
 	"github.com/IBM/sarama"
     "dia/interview/consumer/pkg/database"
 )
@@ -24,6 +23,11 @@ const (
     ConsumerGroup      = "notifications-group"
 )
 
+var (
+	InfoLog  = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	ErrorLog = log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+)
+
 // DataStore stores the received messages
 type DataStore struct {
     mu   sync.Mutex
@@ -34,19 +38,6 @@ func NewDataStore() *DataStore {
     return &DataStore{
         data: []CityTemperatureData{},
     }
-}
-
-func (s *DataStore) Add(data CityTemperatureData) {
-    s.mu.Lock()
-    defer s.mu.Unlock()
-    s.data = append(s.data, data)
-    fmt.Println(s.data)
-}
-
-func (s *DataStore) GetAll() []CityTemperatureData {
-    s.mu.Lock()
-    defer s.mu.Unlock()
-    return s.data
 }
 
 // Consumer represents a Sarama consumer group consumer
@@ -70,7 +61,7 @@ func (consumer *Consumer) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
     for msg := range claim.Messages() {
         var data CityTemperatureData
         if err := json.Unmarshal(msg.Value, &data); err != nil {
-            log.Printf("Error unmarshalling data: %v", err)
+            ErrorLog.Printf("Error unmarshalling data: %v", err)
             continue
         }
 
@@ -81,20 +72,18 @@ func (consumer *Consumer) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
             Time:        data.Time.Format(time.RFC3339),
         }
         if err := consumer.DB.SaveCityTemperature(dbData); err != nil {
-            log.Printf("Failed to save data to database: %v", err)
+            ErrorLog.Printf("Failed to save data to database: %v", err)
             continue
         }
-
+        InfoLog.Printf("Temperature Data for %s saved successfully", data.City)
         sess.MarkMessage(msg, "")
     }
     return nil
 }
 
-
-
 func initializeConsumerGroup() (sarama.ConsumerGroup, error) {
     config := sarama.NewConfig()
-    config.Version = sarama.MaxVersion // Adjust as per your Kafka version
+    config.Version = sarama.MaxVersion
 
     // Start consuming from the oldest message
     config.Consumer.Offsets.Initial = sarama.OffsetOldest
@@ -117,18 +106,18 @@ func NewConsumer(store *DataStore, db *database.DB) *Consumer {
 func SetupConsumerGroup(ctx context.Context, consumer *Consumer) {
     consumerGroup, err := initializeConsumerGroup()
     if err != nil {
-        log.Fatalf("Failed to initialize consumer group: %v", err)
+        ErrorLog.Fatalf("Failed to initialize consumer group: %v", err)
     }
     defer consumerGroup.Close()
 
     for {
         if err := consumerGroup.Consume(ctx, []string{KafkaTopic}, consumer); err != nil {
-            log.Printf("Error from consumer: %v", err)
+            ErrorLog.Printf("Error from consumer: %v", err)
             time.Sleep(5 * time.Second) // retry after a delay
         }
         select {
         case <-ctx.Done():
-            log.Println("Consumer context cancelled, exiting consumer loop")
+            ErrorLog.Println("Consumer context cancelled, exiting consumer loop")
             return
         default:
             <-consumer.ready
