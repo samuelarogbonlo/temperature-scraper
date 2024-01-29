@@ -1,4 +1,4 @@
-package kafka
+package kafkaProducer
 
 import (
 	"encoding/json"
@@ -22,15 +22,14 @@ var (
 )
 
 const (
-	KafkaEnvVariable    = "KAFKA_SERVER_ADDRESS" // Name of the environment variable
 	KafkaTopic          = "notifications"
 	ProducerPort        = ":8080"
 )
 
 func SetupProducer() (sarama.SyncProducer, error) {
-	kafkaAddress := os.Getenv("KafkaEnvVariable") 
+	kafkaAddress := os.Getenv("KAFKA_SERVER_ADDRESS") 
 	if kafkaAddress == "" {
-		return nil, fmt.Errorf("kafka address not set in environment variable kafkaEnvVariable")
+		return nil, fmt.Errorf("kafka address not set in environment variable KAFKA_SERVER_ADDRESS")
 	}
 
 	config := sarama.NewConfig()

@@ -70,36 +70,38 @@ func getTemperature(city string) (string, error) {
 
 func main() {
 
-	producer, err := kafka.SetupProducer()
+	producer, err := kafkaProducer.SetupProducer()
 	if err != nil {
-		kafka.ErrorLog.Fatalf("Failed to initialize Kafka producer: %v", err)
+		kafkaProducer.ErrorLog.Fatalf("Failed to initialize Kafka producer: %v", err)
 	}
+	kafkaProducer.InfoLog.Println("Kafka producer initialized successfully")
 	defer producer.Close()
 
+
 	cronJob := cron.New()
-	kafka.InfoLog.Println("Starting Temperature Scheduler")
-	kafka.InfoLog.Printf("Starting HTTP server on port %s", kafka.ProducerPort)
+	kafkaProducer.InfoLog.Println("Starting Temperature Scheduler")
+	kafkaProducer.InfoLog.Printf("Starting HTTP server on port %s", kafkaProducer.ProducerPort)
 	cronJob.AddFunc("@hourly", func() {
 		cities := []string{"Zurich", "London", "Miami", "Tokyo", "Singapore"}
 		for _, city := range cities {
 			temp, err := getTemperature(city)
 			if err != nil {
-				kafka.ErrorLog.Printf("Could not get temperature for %s: %s\n", city, err)
+				kafkaProducer.ErrorLog.Printf("Could not get temperature for %s: %s\n", city, err)
 				continue
 			}
 
-			cityTempData := kafka.CityTemperatureData{
+			cityTempData := kafkaProducer.CityTemperatureData{
 				City:        city,
 				Temperature: temp,
 				Time:        time.Now(),
 			}
 
-			err = kafka.SendKafkaMessage(producer, cityTempData)
+			err = kafkaProducer.SendKafkaMessage(producer, cityTempData)
 			if err != nil {
-				kafka.ErrorLog.Printf("Failed to send Kafka message for %s: %s\n", city, err)
+				kafkaProducer.ErrorLog.Printf("Failed to send Kafka message for %s: %s\n", city, err)
 				continue
 			}
-			kafka.InfoLog.Printf("Kafka message sent for %s", city)
+			kafkaProducer.InfoLog.Printf("Kafka message sent for %s", city)
 		}
 	})
 	cronJob.Start()
@@ -110,7 +112,7 @@ func main() {
 	http.Handle("/metrics", promhttp.Handler())
 
 	go func() {
-		kafka.ErrorLog.Fatal(http.ListenAndServe(":8080", nil))
+		kafkaProducer.ErrorLog.Fatal(http.ListenAndServe(":8080", nil))
 	}()
 
 	select {}
