@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
     --mount=type=bind,target=. \
     CGO_ENABLED=0 go build -o /bin/server .
 
-FROM alpine:latest AS final
+FROM alpine:3.19.1 AS final
 
 
 RUN apk --no-cache add ca-certificates tzdata && \
