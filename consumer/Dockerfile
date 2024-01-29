@@ -30,7 +30,12 @@ USER appuser
 
 COPY --from=build /bin/server /bin/
 
-ENV POSTGRES_CONNECTION_STRING ""
+ENV DB_HOST ""
+ENV DB_USER ""
+ENV DB_PORT ""
+ENV DB_PASSWORD ""
+ENV DB_NAME ""
+ENV DB_SSLMODE ""
 ENV KAFKA_SERVER_ADDRESS ""
 
 # Expose the port that the application listens on.

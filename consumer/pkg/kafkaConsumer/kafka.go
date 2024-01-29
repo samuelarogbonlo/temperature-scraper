@@ -19,7 +19,6 @@ type CityTemperatureData struct {
 }
 
 const (
-	KafkaServerAddress = "KAFKA_SERVER_ADDRESS"
 	KafkaTopic         = "notifications"
 	ConsumerGroup      = "notifications-group"
 )
@@ -85,14 +84,14 @@ func initializeConsumerGroup() (sarama.ConsumerGroup, error) {
 	config := sarama.NewConfig()
 	config.Version = sarama.MaxVersion
 
-	kafkaAddress := os.Getenv(KafkaServerAddress)
+	kafkaAddress := os.Getenv("KAFKA_SERVER_ADDRESS")
 	if kafkaAddress == "" {
-		return nil, fmt.Errorf("kafka address not set in environment variable kafkaEnvVariable")
+		return nil, fmt.Errorf("kafka address not set in environment variable KAFKA_SERVER_ADDRESS")
 	}
 
 	// Start consuming from the oldest message
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest
-	consumerGroup, err := sarama.NewConsumerGroup([]string{KafkaServerAddress}, ConsumerGroup, config)
+	consumerGroup, err := sarama.NewConsumerGroup([]string{kafkaAddress}, ConsumerGroup, config)
 	if err != nil {
 		return nil, err
 	}

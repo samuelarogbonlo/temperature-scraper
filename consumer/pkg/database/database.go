@@ -2,12 +2,41 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
 
 	_ "github.com/lib/pq"
 )
 
 type DB struct {
 	*sql.DB
+}
+
+func New() (*DB, error) {
+	// Construct the connection string using environment variables
+	dsn := os.ExpandEnv("host=${DB_HOST} user=${DB_USER} password=${DB_PASSWORD} dbname=${DB_NAME} port=${DB_PORT} sslmode=${DB_SSLMODE}")
+
+	// Check if any essential environment variable is missing
+	requiredVars := []string{"DB_HOST", "DB_USER", "DB_PASSWORD", "DB_NAME", "DB_PORT", "DB_SSLMODE"}
+	for _, varName := range requiredVars {
+		if os.Getenv(varName) == "" {
+			return nil, fmt.Errorf("missing required environment variable: %s", varName)
+		}
+	}
+
+	// Open a new database connection
+	db, err := sql.Open("postgres", dsn)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check the database connection
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+
+	return &DB{db}, nil
 }
 
 type CityTemperature struct {
@@ -30,20 +59,6 @@ func (db *DB) InitializeSchema() error {
 		return err
 	}
 	return nil
-}
-
-func New(connectionString string) (*DB, error) {
-	db, err := sql.Open("postgres", connectionString)
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
-
-	return &DB{db}, nil
 }
 
 func (db *DB) SaveCityTemperature(data CityTemperature) error {

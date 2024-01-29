@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"os"
 
 	"dia/interview/consumer/pkg/database"
 	"dia/interview/consumer/pkg/kafkaConsumer"
@@ -38,14 +37,9 @@ var (
 const ConsumerPort = ":8081"
 
 func main() {
-	// Fetch database connection string from environment variable
-	dbConnString := os.Getenv("POSTGRES_CONNECTION_STRING")
-	if dbConnString == "" {
-		kafkaConsumer.ErrorLog.Fatalf("POSTGRES_CONNECTION_STRING is not bound in the environment")
-	}
 
 	// Initialize database connection
-	db, err := database.New(dbConnString)
+	db, err := database.New()
 	if err != nil {
 		kafkaConsumer.ErrorLog.Fatalf("Failed to connect to database: %v", err)
 	}
