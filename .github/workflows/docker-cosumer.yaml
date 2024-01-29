@@ -1,4 +1,4 @@
-name: Dia Docker Image
+name: Dia Docker Image Consumer
 
 on:
   pull_request:

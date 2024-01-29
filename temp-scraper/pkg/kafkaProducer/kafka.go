@@ -2,10 +2,12 @@ package kafka
 
 import (
 	"encoding/json"
-	"github.com/IBM/sarama"
+	"fmt"
 	"log"
 	"os"
 	"time"
+
+	"github.com/IBM/sarama"
 )
 
 type CityTemperatureData struct {
@@ -21,25 +23,27 @@ var (
 
 const (
 	KafkaEnvVariable    = "KAFKA_SERVER_ADDRESS" // Name of the environment variable
-	DefaultKafkaAddress = "localhost:9092"       // Default address if env variable is not set
 	KafkaTopic          = "notifications"
 	ProducerPort        = ":8080"
 )
 
 func SetupProducer() (sarama.SyncProducer, error) {
-	kafkaAddress := os.Getenv(KafkaEnvVariable)
+	kafkaAddress := os.Getenv("KafkaEnvVariable") 
 	if kafkaAddress == "" {
-		kafkaAddress = DefaultKafkaAddress
+		return nil, fmt.Errorf("kafka address not set in environment variable kafkaEnvVariable")
 	}
 
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true
+
 	producer, err := sarama.NewSyncProducer([]string{kafkaAddress}, config)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create Kafka producer: %w", err)
 	}
+
 	return producer, nil
 }
+
 
 func SendKafkaMessage(producer sarama.SyncProducer, cityTempData CityTemperatureData) error {
 	dataJSON, err := json.Marshal(cityTempData)

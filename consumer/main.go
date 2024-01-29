@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"net/http"
+	"os"
 
 	"dia/interview/consumer/pkg/database"
 	"dia/interview/consumer/pkg/kafkaConsumer"
@@ -39,17 +39,20 @@ const ConsumerPort = ":8081"
 
 func main() {
 	// Fetch database connection string from environment variable
-	dbConnString := "postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable"
+	dbConnString := os.Getenv("POSTGRES_CONNECTION_STRING")
+	if dbConnString == "" {
+		kafkaConsumer.ErrorLog.Fatalf("POSTGRES_CONNECTION_STRING is not bound in the environment")
+	}
 
 	// Initialize database connection
 	db, err := database.New(dbConnString)
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		kafkaConsumer.ErrorLog.Fatalf("Failed to connect to database: %v", err)
 	}
 
 	// Initialize database schema
 	if err := db.InitializeSchema(); err != nil {
-		log.Fatalf("Failed to initialize database schema: %v", err)
+		kafkaConsumer.ErrorLog.Fatalf("Failed to initialize database schema: %v", err)
 	}
 
 	// Initialize Kafka consumer
@@ -84,7 +87,7 @@ func main() {
 
 		data, err := db.GetCityTemperature(city)
 		if err != nil {
-			log.Printf("Error querying database: %v", err)
+			kafkaConsumer.ErrorLog.Printf("Error querying database: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 			return
 		}
@@ -96,7 +99,7 @@ func main() {
 
 		prettyJSON, err := json.MarshalIndent(data, "", "    ")
 		if err != nil {
-			log.Printf("Error formatting JSON: %v", err)
+			kafkaConsumer.ErrorLog.Printf("Error formatting JSON: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 			return
 		}

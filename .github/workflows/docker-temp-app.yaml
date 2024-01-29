@@ -1,4 +1,4 @@
-name: Dia Docker Image
+name: Dia Docker Image Temp Scraper
 
 on:
   pull_request:

@@ -33,6 +33,9 @@ USER appuser
 
 COPY --from=build /bin/server /bin/
 
+ENV POSTGRES_CONNECTION_STRING ""
+ENV KAFKA_SERVER_ADDRESS ""
+
 # Expose the port that the application listens on.
 EXPOSE 8081
 

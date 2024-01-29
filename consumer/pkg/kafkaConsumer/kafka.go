@@ -9,6 +9,7 @@ import (
 	"os"
 	"sync"
 	"time"
+	"fmt"
 )
 
 type CityTemperatureData struct {
@@ -18,7 +19,7 @@ type CityTemperatureData struct {
 }
 
 const (
-	KafkaServerAddress = "localhost:9092"
+	KafkaServerAddress = "KAFKA_SERVER_ADDRESS"
 	KafkaTopic         = "notifications"
 	ConsumerGroup      = "notifications-group"
 )
@@ -83,6 +84,11 @@ func (consumer *Consumer) ConsumeClaim(sess sarama.ConsumerGroupSession, claim s
 func initializeConsumerGroup() (sarama.ConsumerGroup, error) {
 	config := sarama.NewConfig()
 	config.Version = sarama.MaxVersion
+
+	kafkaAddress := os.Getenv(KafkaServerAddress)
+	if kafkaAddress == "" {
+		return nil, fmt.Errorf("kafka address not set in environment variable kafkaEnvVariable")
+	}
 
 	// Start consuming from the oldest message
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest
