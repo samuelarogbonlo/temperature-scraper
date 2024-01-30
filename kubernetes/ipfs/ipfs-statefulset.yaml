@@ -129,17 +129,17 @@ spec:
         name: cluster-storage
         namespace: ipfs
       spec:
-        storageClassName: linode-block-storage-retain
+        storageClassName: standard
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 100Gi
+            storage: 5Gi
     - metadata:
         name: ipfs-storage
         namespace: ipfs
       spec:
-        storageClassName: linode-block-storage-retain
+        storageClassName: standard
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 200Gi
+            storage: 10Gi
