@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ipfs-cluster
+  namespace: ipfs
+  labels:
+    app: ipfs-cluster
+spec:
+  type: ClusterIP
+  ports:
+  - name: ipfs-swarm
+    targetPort: 4001
+    port: 4001
+  - name: ipfs-api
+    targetPort: 5001
+    port: 5001
+  - name: swarm-udp
+    targetPort: swarm-udp
+    port: 4002
+  - name: ws
+    targetPort: ws
+    port: 8081
+  - name: http
+    targetPort: 8080
+    port: 8080
+  - name: api-http
+    targetPort: 9094
+    port: 9094
+  - name: proxy-http
+    targetPort: proxy-http
+    port: 9095
+  - name: cluster-swarm
+    targetPort: cluster-swarm
+    port: 9096
+  selector:
+    app: ipfs-cluster
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: swarm-svc
+  namespace: ipfs
+  labels:
+    app: ipfs-cluster
+spec:
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+  ports:
+  - name: ipfs-swarm
+    targetPort: 4001
+    port: 4001
+  - name: cluster-swarm
+    targetPort: 9096
+    port: 9096
+  selector:
+    app: ipfs-cluster
