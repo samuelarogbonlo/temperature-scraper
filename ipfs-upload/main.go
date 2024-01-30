@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"encoding/json"
 	"time"
-	//"encoding/csv"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"github.com/joho/sqltocsv"
+	"github.com/ipfs/go-ipfs-api"
 )
 
 type CityTemperature struct {
@@ -28,7 +28,14 @@ type WeatherAggregate struct {
     MaxTemperature  float64
 }
 
-
+func uploadToIPFS(filename string)(string, error){
+	sh := shell.NewShell("localhost:5001")
+	cid, err := sh.AddDir(filename)
+	if err != nil {
+		return "", err
+	}
+	return cid, nil
+}
 
 func main(){
 	if len(os.Args) < 3 {
@@ -102,11 +109,18 @@ func main(){
         log.Fatalf("No data found for city '%s' on date '%s'", city, date)
     }
 
-    // Use sqltocsv to write directly to a file
-    err = sqltocsv.WriteFile("weather_aggregates.csv", rows)
+    // Using sqltocsv to write directly to a file
+	filename := fmt.Sprintf("temp_data_points_%s_%s.csv", city, date)
+    err = sqltocsv.WriteFile(filename, rows)
     if err != nil {
         log.Fatal("Unable to write to file:", err)
     }
-
     log.Println("Export completed successfully")
+	cid, err := uploadToIPFS(filename)
+	if err != nil {
+        log.Fatal("Failed to upload to IPFS: ", err)
+    }
+
+    fmt.Printf("File uploaded to IPFS with CID: %s\n", cid)
+    fmt.Printf("Publicly accessible link (via IPFS gateway): https://ipfs.io/ipfs/%s\n", cid)
 }
