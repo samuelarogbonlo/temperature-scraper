@@ -133,7 +133,7 @@ spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 5Gi
+            storage: 1Gi
     - metadata:
         name: ipfs-storage
         namespace: ipfs
@@ -142,4 +142,4 @@ spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 10Gi
+            storage: 2Gi
