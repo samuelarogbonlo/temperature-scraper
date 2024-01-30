@@ -1,11 +1,27 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kafka-secret
+  namespace: temp-app
+type: Opaque
+data:
+  KAFKA_SERVER_ADDRESS: <base64-encoded-value>
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: go-server-deployment
+  namespace: temp-app
   labels:
     app: go-server
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: go-server
@@ -22,13 +38,23 @@ spec:
         - containerPort: 9092
         env:
         - name: KAFKA_SERVER_ADDRESS
-          value: "my-cluster-kafka-bootstrap:9092"
+          valueFrom:
+            secretKeyRef:
+              name: kafka-secret
+              key: KAFKA_SERVER_ADDRESS
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 15
+          timeoutSeconds: 2
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: go-server-service
+  namespace: temp-app
 spec:
   selector:
     app: go-server
@@ -44,5 +70,3 @@ spec:
       targetPort: 9092
       nodePort: 30092
   type: NodePort
-
-
