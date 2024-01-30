@@ -1,0 +1,5 @@
+ipfs-upload/.env
+ipfs-upload/go.sum
+ipfs-upload/go.mod
+ipfs-upload/ipfs-upload
+ipfs-upload/weather_aggregates.csv
