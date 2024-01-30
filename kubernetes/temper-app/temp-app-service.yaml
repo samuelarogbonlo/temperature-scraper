@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-server-service
+  namespace: temp-app
+spec:
+  selector:
+    app: go-server
+  ports:
+    - name: http-port
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
+    - name: kafka-port
+      protocol: TCP
+      port: 9092
+      targetPort: 9092
+  type: ClusterIP

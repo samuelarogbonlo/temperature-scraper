@@ -23,7 +23,7 @@ var (
 
 const (
 	KafkaTopic          = "notifications"
-	ProducerPort        = ":8080"
+	ProducerPort        = ":4000"
 )
 
 func SetupProducer() (sarama.SyncProducer, error) {
