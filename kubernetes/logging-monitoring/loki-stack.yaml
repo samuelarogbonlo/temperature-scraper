@@ -106,3 +106,9 @@ spec:
 
         logstash:
           enabled: false
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
