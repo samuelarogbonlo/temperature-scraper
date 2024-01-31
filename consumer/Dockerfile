@@ -39,7 +39,8 @@ ENV DB_SSLMODE ""
 ENV KAFKA_SERVER_ADDRESS ""
 
 # Expose the port that the application listens on.
-EXPOSE 8081
+EXPOSE 4002
+EXPOSE 9092
 
 # What the container should run when it is started.
 ENTRYPOINT [ "/bin/server" ]

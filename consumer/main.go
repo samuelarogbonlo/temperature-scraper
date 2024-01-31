@@ -34,7 +34,7 @@ var (
 	)
 )
 
-const ConsumerPort = ":8081"
+const ConsumerPort = ":4002"
 
 func main() {
 
@@ -52,10 +52,12 @@ func main() {
 	// Initialize Kafka consumer
 	store := kafkaConsumer.NewDataStore()
 	consumer := kafkaConsumer.NewConsumer(store, db)
+	kafkaConsumer.InfoLog.Println("Kafka Consumer initialized successfully")
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go kafkaConsumer.SetupConsumerGroup(ctx, consumer)
 	defer cancel()
+	kafkaConsumer.InfoLog.Println("Kafka Consumer Group initialized successfully")
 
 	gin.SetMode(gin.ReleaseMode)
 	// Setup Gin HTTP server
