@@ -22,7 +22,7 @@ spec:
           enabled: true
           persistence:
             volumeClaimsEnabled: true
-             storageClass: standard
+            storageClass: standard
             size: 1Gi
           securityContext:
             runAsGroup: 10001
