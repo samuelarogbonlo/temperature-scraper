@@ -21,8 +21,8 @@ spec:
             pspEnabled: false
           enabled: true
           persistence:
-            accessModes:
-              - ReadWriteOnce
+            volumeClaimsEnabled: true
+             storageClass: standard
             size: 1Gi
           securityContext:
             runAsGroup: 10001
