@@ -112,7 +112,7 @@ func main() {
 	http.Handle("/metrics", promhttp.Handler())
 
 	go func() {
-		kafkaProducer.ErrorLog.Fatal(http.ListenAndServe(":8080", nil))
+		kafkaProducer.ErrorLog.Fatal(http.ListenAndServe(kafkaProducer.ProducerPort, nil))
 	}()
 
 	select {}
