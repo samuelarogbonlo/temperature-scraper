@@ -21,9 +21,8 @@ spec:
             pspEnabled: false
           enabled: true
           persistence:
-            type: pvc
-            enabled: true
-            existingClaim: loki
+            volumeClaimsEnabled: true
+            size: 1Gi
           securityContext:
             runAsGroup: 10001
             runAsUser: 10001
@@ -45,9 +44,9 @@ spec:
           image:
             tag: 8.2.2
           persistence:
-            type: pvc
-            enabled: true
-            existingClaim: grafana
+            accessModes:
+              - ReadWriteOnce
+            size: 1Gi
           securityContext:
             runAsUser: 472
             runAsGroup: 472
@@ -65,9 +64,8 @@ spec:
           server:
             persistentVolume:
               enabled: true
-              existingClaim: prometheus-server
               accessModes:
-                - ReadWriteMany
+                - ReadWriteOnce
             resources:
               limits:
                 cpu: 800m
@@ -78,9 +76,8 @@ spec:
           alertmanager:
             persistentVolume:
               enabled: true
-              existingClaim: prometheus-alertmanager
               accessModes:
-                - ReadWriteMany
+                - ReadWriteOnce
             resources:
               limits:
                 cpu: 100m
