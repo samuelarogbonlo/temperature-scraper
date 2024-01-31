@@ -35,6 +35,8 @@ spec:
           enabled: false
 
         grafana:
+          rbac:
+            pspEnabled: false
           enabled: true
           namespaceOverride: grafana
           sidecar:
