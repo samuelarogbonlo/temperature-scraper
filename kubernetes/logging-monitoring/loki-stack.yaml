@@ -17,6 +17,8 @@ spec:
     helm:
       values: |
         loki:
+          rbac:
+            pspEnabled: false
           enabled: true
           persistence:
             type: pvc
