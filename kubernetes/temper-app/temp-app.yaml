@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: go-server-deployment
+  name: temp-app-deployment
   namespace: temp-app
   labels:
     app: go-server
@@ -14,15 +14,16 @@ spec:
       maxSurge: 1
   selector:
     matchLabels:
-      app: go-server
+      app: temp-app
   template:
     metadata:
       labels:
-        app: go-server
+        app: temp-app
     spec:
       containers:
-      - name: go-server
+      - name: temp-app
         image: joesam007/temp-scraper:edge
+        imagePullPolicy: Always
         ports:
         - containerPort: 4000
         - containerPort: 9092
@@ -38,4 +39,3 @@ spec:
             port: 4000
           initialDelaySeconds: 15
           timeoutSeconds: 2
-
