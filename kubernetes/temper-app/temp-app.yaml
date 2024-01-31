@@ -33,9 +33,4 @@ spec:
             secretKeyRef:
               name: kafka-secret
               key: KAFKA_SERVER_ADDRESS
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 4000
-          initialDelaySeconds: 15
-          timeoutSeconds: 2
+
