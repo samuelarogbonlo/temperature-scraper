@@ -48,9 +48,13 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - name: ipfs
+  - name: gateway
     port: 8080
     targetPort: 8080
+    protocol: TCP
+  - name: api
+    port: 5001
+    targetPort: 5001
     protocol: TCP
   selector:
     app: ipfs
