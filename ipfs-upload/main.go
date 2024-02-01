@@ -122,8 +122,7 @@ func main() {
         log.Fatal("Failed to upload to IPFS: ", err)
     }
 
-    fmt.Printf(`
-	!!COPY CID and SAVE IN SECURE LOCATION!!
-	File uploaded to IPFS with CID: %s\n`, cid)
-    fmt.Printf("Publicly accessible link (via IPFS gateway): https://ipfs.io/ipfs/%s\n", cid)
+	ipfsGatewayUrl := os.Getenv("IPFS_GATEWAY_URL")
+    fmt.Printf("File uploaded to IPFS with CID: %s\n", cid)
+    fmt.Printf("Publicly accessible link (via IPFS gateway): %s/ipfs/%s\n", ipfsGatewayUrl, cid)
 }
