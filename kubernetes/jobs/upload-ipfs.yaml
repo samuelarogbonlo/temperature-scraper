@@ -7,6 +7,36 @@ spec:
     spec:
       containers:
       - name: upload-ipfs
-        image: busybox
-        command: ["sh", "-c", "echo Hello, Kubernetes! && sleep 30"]
+        image: joesam007/ipfs-upload
+        env: 
+        - name: IPFS_API_URL
+          valueFrom:
+            secretKeyRef:
+              name: upload-ipfs-secret
+              key: IPFS_API_URL
+        - name: IPFS_GATEWAY_URL
+          valueFrom:
+            secretKeyRef:
+              name: upload-ipfs-secret
+              key: IPFS_GATEWAY_URL
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: upload-ipfs-secret
+              key: DB_PORT
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: upload-ipfs-secret
+              key: DB_HOST
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: upload-ipfs-secret
+              key: DB_PASS
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: upload-ipfs-secret
+              key: DB_NAME
       restartPolicy: Never
