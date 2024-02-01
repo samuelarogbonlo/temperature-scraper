@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: consumer-app-service
   namespace: consumer-app
+  annotations:
+    prometheus.io/scrape: 'true'
 spec:
   selector:
     app: consumer-app

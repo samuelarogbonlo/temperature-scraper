@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: temp-app-monitor
+  namespace: temp-app
+spec:
+  selector:
+    matchLabels:
+      app: temp-app
+  endpoints:
+  - port: http-port
+    interval: 30s
+    path: /metrics
