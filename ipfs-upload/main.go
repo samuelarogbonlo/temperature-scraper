@@ -129,6 +129,9 @@ func main() {
     }
 
 	ipfsGatewayUrl := os.Getenv("IPFS_GATEWAY_URL")
+	if ipfsGatewayUrl == ""{
+		log.Fatal("IPFS GATEWAY URL not set in environment variable IPFS_GATEWAY_URL")
+	}
     fmt.Printf("File uploaded to IPFS with CID: %s\n", cid)
     fmt.Printf("Publicly accessible link (via IPFS gateway): %s/ipfs/%s\n", ipfsGatewayUrl, cid)
 }
