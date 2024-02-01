@@ -55,6 +55,9 @@ spec:
   - name: api
     port: 5001
     targetPort: 5001
+  - name: swarm
+    port: 4001
+    targetPort: 4001
     protocol: TCP
   selector:
     app: ipfs

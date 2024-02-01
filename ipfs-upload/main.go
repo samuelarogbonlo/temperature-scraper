@@ -32,7 +32,7 @@ type TemperatureAggregate struct {
 
 // Upload exported CSV to IPFS
 func uploadToIPFS(filename string)(string, error){
-	sh := shell.NewShell("localhost:5001")
+	sh := shell.NewShell("128.140.111.232:5001")
 	cid, err := sh.AddDir(filename)
 	if err != nil {
 		return "", err
