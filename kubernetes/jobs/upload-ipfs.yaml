@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: upload-ipfs
-        image: joesam007/ipfs-upload
+        image: joesam007/ipfs-upload:edge
         env: 
         - name: IPFS_API_URL
           valueFrom:
