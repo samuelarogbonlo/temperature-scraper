@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 	"gorm.io/driver/postgres"
+	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 	"github.com/joho/sqltocsv"
 	"github.com/ipfs/go-ipfs-api"
@@ -61,6 +62,11 @@ func main() {
     if date_err != nil {
         log.Fatal("Invalid date format. Please use YYYY-MM-DD.")
     }
+
+	env_err := godotenv.Load()
+	if env_err != nil{
+		log.Fatalf("Error loading .env file: %s", env_err)
+	}
 
 	DB_HOST := os.Getenv("DB_HOST")
 	DB_PORT := os.Getenv("DB_PORT")
