@@ -35,70 +35,11 @@ spec:
           enabled: false
 
         grafana:
-          rbac:
-            pspEnabled: false
-          enabled: true
-          namespaceOverride: grafana
-          sidecar:
-            datasources:
-              enabled: false
-          image:
-            tag: 8.2.2
-          persistence:
-            accessModes:
-              - ReadWriteOnce
-            size: 1Gi
-          securityContext:
-            runAsUser: 472
-            runAsGroup: 472
-          initChownData:
-            enabled: false
-
+          enabled: false
+        
         prometheus:
-          enabled: true
-          forceNamespace: prometheus
-          configmapReload:
-            prometheus:
-              enabled: false
-            alertmanager:
-              enabled: false
-          server:
-            persistentVolume:
-              enabled: true
-              accessModes:
-                - ReadWriteOnce
-            resources:
-              limits:
-                cpu: 800m
-                memory: 1Gi
-              requests:
-                cpu: 500m
-                memory: 512Mi
-          alertmanager:
-            persistentVolume:
-              enabled: true
-              accessModes:
-                - ReadWriteOnce
-            resources:
-              limits:
-                cpu: 100m
-                memory: 100Mi
-              requests:
-                cpu: 50m
-                memory: 50Mi
-          nodeExporter:
-            enabled: true
-            tolerations:
-              - key: node-role.kubernetes.io/master
-                effect: NoSchedule
-            resources:
-              limits:
-                cpu: 200m
-                memory: 50Mi
-              requests:
-                cpu: 100m
-                memory: 30Mi
-
+          enabled: false
+          
         filebeat:
           enabled: false
 
