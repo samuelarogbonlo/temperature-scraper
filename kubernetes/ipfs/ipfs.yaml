@@ -4,9 +4,12 @@ metadata:
   name: ipfs
   namespace: ipfs
   labels:
-    name: ipfs
+    app: ipfs
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: ipfs
   template:
     metadata:
       labels:
@@ -25,6 +28,16 @@ spec:
         - containerPort: 8080
           name: "gateway"
           protocol: "TCP"
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        volumeMounts:
+        - name: ipfs-data
+          mountPath: /data/ipfs
+      volumes:
+      - name: ipfs-data
+        emptyDir: {}
 
 ---
 apiVersion: v1
