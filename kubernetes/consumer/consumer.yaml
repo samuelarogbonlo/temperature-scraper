@@ -43,11 +43,11 @@ spec:
             secretKeyRef:
               name: consumer-secret
               key: DB_USER
-        - name: DB_PORT
+        - name: DB_HOST
           valueFrom:
             secretKeyRef:
               name: consumer-secret
-              key: DB_PORT
+              key: DB_HOST
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
