@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 	"gorm.io/driver/postgres"
+	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 	"github.com/joho/sqltocsv"
 	"github.com/ipfs/go-ipfs-api"
@@ -55,8 +56,20 @@ func main() {
         log.Fatal("Invalid date format. Please use YYYY-MM-DD.")
     }
 
+	env_err := godotenv.Load()
+	if env_err != nil{
+		log.Fatalf("Error loading .env file: %s", env_err)
+	}
+
+	DB_HOST := os.Getenv("DB_HOST")
+	DB_PORT := os.Getenv("DB_PORT")
+	DB_USER := os.Getenv("DB_USER")
+	DB_PASS := os.Getenv("DB_PASS")
+	DB_NAME := os.Getenv("DB_NAME")
+
 	var err error
-	dsn := os.ExpandEnv("host=${DB_HOST} user=${DB_USER} password=${DB_PASSWORD} dbname=${DB_NAME} port=5432 sslmode=${SSL_MODE}")
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT)
+	// dsn := os.ExpandEnv("host=${DB_HOST} user=${DB_USER} password=${DB_PASSWORD} dbname=${DB_NAME} port=5432 sslmode=${SSL_MODE}")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	
 	if err != nil {
