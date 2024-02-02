@@ -29,6 +29,9 @@ spec:
           name: "gateway"
           protocol: "TCP"
         resources:
+          requests:
+            cpu: "700m"
+            memory: "700Mi"
           limits:
             memory: "512Mi"
             cpu: "500m"
@@ -38,6 +41,7 @@ spec:
       volumes:
       - name: ipfs-data
         emptyDir: {}
+
 
 ---
 apiVersion: v1
