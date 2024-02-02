@@ -56,7 +56,7 @@ Currently, the project is being managed with the GitOps approach using ArgoCD an
 
 - Also, there was a need to expand the server a little bit for us to accommodate all the services and deployments so we had to increase the server size.
 
-- Lastly, we must also add that Minikube made things a little manual and slow because of the need to manage lots of things because of the small nature of the cluster. Of course, minikube is used for smaller setups and less production-based implementations.
+- Lastly, we must also add that Minikube made things a little manual and slightly slow because of the need to manage lots of things in the cluster. Of course, minikube is used for smaller setups and less production-based implementations.
 
 ## Author
 - Samuel Arogbonlo - [GitHub](https://github.com/samuelarogbonlo)
