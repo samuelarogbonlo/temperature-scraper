@@ -30,7 +30,7 @@ Our CI is facilitated by GitHub Actions, which automates and integrates some pro
 - Run `minikube addons enable metrics-server` to install the metrics server for autoscaling.
 - Setup and install ArgoCD with this command `kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml.` and `kubectl create namespace argocd` For more information on installations, check [here](https://argo-cd.readthedocs.io/en/stable/getting_started/)
 - Run this command on the server `kubectl port-forward --address 0.0.0.0 svc/argocd-server -n argocd 8081:443`.
-- Go to the browser and access the ArgoCD UI with [http://<server-ip>:8081/](http://<server-ip>:8081/)
+- Go to the browser and access the ArgoCD UI with `http://<server-ip>:8081/`
 - For the login details for the UI, use the default username `admin` and to get the password, run `kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d` on the server.
 - After logging in, navigate to **Settings** then to **Repository** then click **Connect Repo** and fill all required details.
 - Then create a new app by Navigating to **Applications** then click **New App** and fill in all details required for each app in the `Kubernetes` directory in the `temp-scraper` repository.
@@ -44,13 +44,13 @@ Once you have installed and deployed the applications via ArgoCD, you can access
 
 - Access the server and get the Grafana login password with `kubectl get secret --namespace monitoring prometheus-stack-chart-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo` and username is `admin`.
 - On Grafana, you may have to configure the data sources manually like Loki and Prometheus. However, for the current setup, it is all active.
-- To view the current setup, you have first to access the server and run `kubectl port-forward --address 0.0.0.0 svc/prometheus-stack-chart-grafana -n monitoring 3001:80` then go to the browser and run this URL [http://<server-ip>:3001/](http://<server-ip>:3001/).
+- To view the current setup, you have first to access the server and run `kubectl port-forward --address 0.0.0.0 svc/prometheus-stack-chart-grafana -n monitoring 3001:80` then go to the browser and run this URL `http://<server-ip>:3001/`.
 
 ## Deployments And Rollbacks
 Currently, the project is being managed with the GitOps approach using ArgoCD and this gives room for seamless deployments on changes to the main branch. Of course, in the future, we can set up different branches like `dev`, `staging` and `main` and still be able to manage rollbacks and updates from ArgoCD UI.
 
 > **_Note:_**
-- For ease of access to the services via the browser on my local machine, a simple NodePort configuration could’ve sufficed. But unfortunately, due to Docker’s networking and Minikube's reliance on Docker, the URL format [http://<server-ip>:<NodePort>](http://<server-ip>:<NodePort>) to access apps deployed on Kubernetes will not suffice outside of the Server, Minikube is running in. As a hotfix, port-forwarding had to be implemented to access the UIs for these apps.
+- For ease of access to the services via the browser on my local machine, a simple NodePort configuration could’ve sufficed. Unfortunately, due to Docker’s networking and Minikube's reliance on Docker, the URL format `http://<server-ip>:<NodePort>` to access apps deployed on Kubernetes will not suffice outside of the Server, Minikube is running in. As a hotfix, port-forwarding had to be implemented to access the UIs for these apps.
 
 - An additional information, we could have been able to set up HPA for Kafka Brokers but to do so effectively, there will have to be careful considerations of autoscaling implications for Kafka. These scaling decisions are based on more than just CPU and memory metrics, they involve operational tasks such as rebalancing partitions that HPA alone cannot handle as a result of having limited resources on the single-node Kubernetes cluster. HPA configurations such as offsets.topic.replication.factor etc. have been set to the barest minimum of 1 each due to limited resources available on the single-node Kubernetes Cluster.
 
