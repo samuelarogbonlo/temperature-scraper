@@ -3,6 +3,8 @@ kind: ServiceMonitor
 metadata:
   name: kafka-monitor
   namespace: kafka
+  labels:
+    release: prometheus-stack-chart
 spec:
   selector:
     matchLabels:

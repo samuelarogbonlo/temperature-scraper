@@ -3,6 +3,8 @@ kind: ServiceMonitor
 metadata:
   name: temp-app-monitor
   namespace: temp-app
+  labels:
+    release: prometheus-stack-chart
 spec:
   selector:
     matchLabels:
