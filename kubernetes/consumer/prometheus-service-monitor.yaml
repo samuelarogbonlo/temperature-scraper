@@ -3,6 +3,8 @@ kind: ServiceMonitor
 metadata:
   name: consumer-app-monitor
   namespace: consumer-app
+  labels:
+    release: prometheus-stack-chart
 spec:
   selector:
     matchLabels:
