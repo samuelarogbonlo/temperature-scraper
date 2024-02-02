@@ -1,15 +1,16 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: temp-app-monitor
-  namespace: temp-app
+  name: ipfs-monitor
+  namespace: ipfs
   labels:
     release: prometheus-stack-chart
 spec:
   selector:
     matchLabels:
-      app: temp-app
+      app: ipfs
   endpoints:
-  - port: http-port
+  - port: gateway
     interval: 30s
-    path: /metrics
+  - port: api
+    interval: 30s
