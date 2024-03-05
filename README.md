@@ -1,8 +1,8 @@
-# DIA Temperature Scraper Deployment Infrastructure task
+# Temperature Scraper Deployment Infrastructure
 
-This repository houses the codebase for the the temperature scraper application infrastructure hosted on Heztner Cloud with proper storage, availability and security. The temperature scraper collects temperature data (in °C) for Zurich, London, Miami, Tokyo, and Singapore.
+This repository houses the codebase for the temperature scraper application infrastructure hosted on Heztner Cloud with proper storage, availability and security. The temperature scraper collects temperature data (in °C) for Zurich, London, Miami, Tokyo, and Singapore.
 
-![DIA Infra drawio](https://github.com/samuelarogbonlo/temp-scraper/assets/47984109/753581bb-e8d1-4ba0-ab71-105ae7e64a8b)
+![Infra drawio](https://github.com/samuelarogbonlo/temp-scraper/assets/47984109/753581bb-e8d1-4ba0-ab71-105ae7e64a8b)
 
 # Infrastructure Overview
 The major components include:
