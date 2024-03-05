@@ -20,6 +20,9 @@ Our CI is facilitated by GitHub Actions, which automates and integrates some pro
 
 # How To Setup And Deploy The Infrastructure?
 
+> **_Note:_**
+- This is the early phase of the project and the next steps will be to put all the commands in a playbook and makefile. Feel free to also contribute as you see fit.
+
 ## Requirements
 - Heztner Server: 8GB RAM, 40GB ROM
 - Helm
@@ -65,7 +68,7 @@ Currently, the project is being managed with the GitOps approach using ArgoCD an
 - [YOUR NAME HERE] - Feel free to contribute to the codebase by resolving any open issues, refactoring, adding new features, writing test cases or any other way to make the project better and helpful to the community. Please feel free to send pull requests.
 
 ## Hire me
-Are you looking for a Senior DevOps Engineer to build your next infrastructure? Get in touch: [sbayo971@gmail.com](mailto:sbayo971@gmail.com)
+Are you looking for an Engineer to build your next infrastructure? Get in touch: [sbayo971@gmail.com](mailto:sbayo971@gmail.com)
 
 ## License
 
